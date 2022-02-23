@@ -105,7 +105,7 @@
 
 		<full_data>
 			<interval units="min">60</interval>
-			<enable>false</enable>
+			<enable>true</enable>
 		</full_data>
 		
 		<SVG>

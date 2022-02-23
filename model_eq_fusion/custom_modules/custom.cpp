@@ -312,32 +312,28 @@ void move_tissues()
 	for (int i = 0; i < (*all_cells).size(); i++)
 	{
 		Cell *pCell = (*all_cells)[i];
-		std::cout << "type:" << pCell->type << std::endl;
+		// std::cout << "type:" << pCell->type << std::endl;
 
 		if (pCell->type == 0)
 		{
-			double tmpr=sqrt((pCell->position[0]-center1[0])*(pCell->position[0]-center1[0])
-			+pCell->position[1]-center1[1])*(pCell->position[1]-center1[1])
-			+pCell->position[2]-center1[2])*(pCell->position[2]-center1[2]));
+			double tmpr = sqrt((pCell->position[0] - center1[0]) * (pCell->position[0] - center1[0]) + (pCell->position[1] - center1[1]) * (pCell->position[1] - center1[1]) + (pCell->position[2] - center1[2]) * (pCell->position[2] - center1[2]));
 			R1.push_back(tmpr);
 			if (tmpr > R1max)
 				R1max = tmpr;
 		}
 		else if (pCell->type == 1)
 		{
-		double tmpr=sqrt((pCell->position[0]-center2[0])*(pCell->position[0]-center2[0])
-			+pCell->position[1]-center2[1])*(pCell->position[1]-center2[1])
-			+pCell->position[2]-center2[2])*(pCell->position[2]-center2[2]));
-		R2.push_back(tmpr);
-		if (tmpr > R2max)
-			R2max = tmpr;
+			double tmpr = sqrt((pCell->position[0] - center2[0]) * (pCell->position[0] - center2[0]) + (pCell->position[1] - center2[1]) * (pCell->position[1] - center2[1]) + (pCell->position[2] - center2[2]) * (pCell->position[2] - center2[2]));
+			R2.push_back(tmpr);
+			if (tmpr > R2max)
+				R2max = tmpr;
 		}
 	}
-tumor_radius1=R1max;
-tumor_radius2=R2max;
+	tumor_radius1 = R1max;
+	tumor_radius2 = R2max;
 
-cout<<"LUO: radius 1:"<<tumor_radius1<<std::endl;
-cout<<"LUO: radius 2:"<<tumor_radius2<<std::endl;
+	std::cout << "LUO: radius 1:" << tumor_radius1 << std::endl;
+	std::cout << "LUO: radius 2:" << tumor_radius2 << std::endl;
 
 	double dx = 0.5 * (distance - tumor_radius1 - tumor_radius2);
 	for (int i = 0; i < (*all_cells).size(); i++)
