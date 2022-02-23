@@ -74,12 +74,12 @@
 
 <PhysiCell_settings version="devel-version">
 	<domain>
-		<x_min>-200</x_min>
-		<x_max>200</x_max>
-		<y_min>-200</y_min>
-		<y_max>200</y_max>
-		<z_min>-200</z_min>
-		<z_max>200</z_max>
+		<x_min>-300</x_min>
+		<x_max>300</x_max>
+		<y_min>-300</y_min>
+		<y_max>300</y_max>
+		<z_min>-300</z_min>
+		<z_max>300</z_max>
 		<dx>20</dx>
 		<dy>20</dy>
 		<dz>20</dz>
@@ -87,7 +87,7 @@
 	</domain>
 	
 	<overall>
-		<max_time units="min">3600</max_time>
+		<max_time units="min">7200</max_time>
 		<time_units>min</time_units>
 		<space_units>micron</space_units>
 	
@@ -105,7 +105,7 @@
 
 		<full_data>
 			<interval units="min">60</interval>
-			<enable>true</enable>
+			<enable>false</enable>
 		</full_data>
 		
 		<SVG>
@@ -382,6 +382,7 @@
 	</initial_conditions>	
 	
 	<user_parameters>
+		<eq_time type="double" units="min">1000</eq_time>
 		<random_seed type="int" units="dimensionless">0</random_seed>
 
 		<number_of_spheroids type="int" units="dimensionless"> 2 </number_of_spheroids>
@@ -390,7 +391,7 @@
 
 		<second_tumor_radius type="double" units="micron">75.0</second_tumor_radius>
 
-		<distance_between_centers type="double" units="micron"> 200 </distance_between_centers>
+		<distance_between_centers type="double" units="micron"> 250 </distance_between_centers>
 	</user_parameters>
 	
 </PhysiCell_settings>

@@ -175,10 +175,42 @@ int main( int argc, char* argv[] )
 	
 	// main loop 
 	
+	double eq_time=parameters.doubles("eq_time");
+	std::cout<<"equilibrium time : "<<parameters.doubles("eq_time")<<" mins"<<std::endl;
+	int flag_eq=0; //0, not equilibrium; 1, after equilibrium
 	try 
 	{		
 		while( PhysiCell_globals.current_time < PhysiCell_settings.max_time + 0.1*diffusion_dt )
 		{
+//			std::cout<<"LUO:current time :"<<PhysiCell_globals.current_time<<std::endl;
+			
+			
+			if (flag_eq==0 && PhysiCell_globals.current_time>=eq_time)
+			{
+				move_tissues();//move the two spheroids to contact
+				flag_eq=1;
+				std::cout<<"LUO: move tissue here."<<std::endl;
+				//save data now
+				display_simulation_status( std::cout ); 
+				if( PhysiCell_settings.enable_legacy_saves == true )
+				{	
+					log_output( PhysiCell_globals.current_time , PhysiCell_globals.full_output_index, microenvironment, report_file);
+				}
+				
+				if( PhysiCell_settings.enable_full_saves == true )
+				{	
+					sprintf( filename , "%s/output_after_eq" , PhysiCell_settings.folder.c_str() ); 
+					
+					save_PhysiCell_to_MultiCellDS_xml_pugi( filename , microenvironment , PhysiCell_globals.current_time ); 
+				}
+				
+				if( PhysiCell_settings.enable_SVG_saves == true )
+				{	
+					sprintf( filename , "%s/snapshot_after_eq.svg" , PhysiCell_settings.folder.c_str() ); 
+					SVG_plot( filename , microenvironment, 0.0 , PhysiCell_globals.current_time, cell_coloring_function );
+				}
+			}
+			
 			// save data if it's time. 
 			if( fabs( PhysiCell_globals.current_time - PhysiCell_globals.next_full_save_time ) < 0.01 * diffusion_dt )
 			{

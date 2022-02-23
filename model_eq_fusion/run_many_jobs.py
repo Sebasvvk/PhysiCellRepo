@@ -28,8 +28,8 @@ first_time = True
 output_dirs = []
 
 
-adhesions=[0,0.1]
-speeds=[0,0.5]
+adhesions=[0.4,1.2,4]
+speeds=[0,0.1,0.2,0.5]
 #follower_speeds=[0.1,0.2,0.3,0.4]
 for adhesion in adhesions:
     for speed in speeds:
@@ -73,6 +73,8 @@ for adhesion in adhesions:
 #            log_file = folder_name + ".logmovie"  
 #            with open(log_file,"w") as outf:
 #                subprocess.run(['sh', 'makemovie.sh '+folder_name],stdout=outf)
+        os.system(cmd)
+        cmd="python3 to_dump.py "+folder_name
         os.system(cmd)
 
 

@@ -184,7 +184,7 @@ void setup_tissue(void)
 
 	double distance_between_centers = parameters.doubles("distance_between_centers");
 	std::cout << "distance between two spheroids is " << distance_between_centers << std::endl;
-	
+
 	if (parameters.ints("number_of_spheroids") == 1)
 		distance_between_centers = 0.0;
 
@@ -252,5 +252,108 @@ void custom_function(Cell *pCell, Phenotype &phenotype, double dt)
 
 void contact_function(Cell *pMe, Phenotype &phenoMe, Cell *pOther, Phenotype &phenoOther, double dt)
 {
+	return;
+}
+
+void move_tissues()
+{
+
+	// find center and radius of the tissues
+	std::vector<double> center1 = {0, 0, 0};
+	std::vector<double> center2 = {0, 0, 0};
+	int Np1 = 0;
+	int Np2 = 0;
+
+	for (int i = 0; i < (*all_cells).size(); i++)
+	{
+		Cell *pCell = (*all_cells)[i];
+		std::cout << "type:" << pCell->type << std::endl;
+
+		if (pCell->type == 0)
+		{
+			center1[0] += pCell->position[0];
+			center1[1] += pCell->position[1];
+			center1[2] += pCell->position[2];
+			Np1 += 1;
+		}
+		else if (pCell->type == 1)
+		{
+			center2[0] += pCell->position[0];
+			center2[1] += pCell->position[1];
+			center2[2] += pCell->position[2];
+			Np2 += 1;
+		}
+	}
+
+	center1[0] /= (double)Np1;
+	center1[1] /= (double)Np1;
+	center1[2] /= (double)Np1;
+
+	center2[0] /= (double)Np2;
+	center2[1] /= (double)Np2;
+	center2[2] /= (double)Np2;
+
+	std::cout << "center of tissue 1 : " << center1[0] << ' ' << center1[1] << ' ' << center1[2] << std::endl;
+	std::cout << "center of tissue 2 : " << center2[0] << ' ' << center2[1] << ' ' << center2[2] << std::endl;
+
+	double distance = sqrt((center1[0] - center2[0]) * (center1[0] - center2[0]) + (center1[1] - center2[1]) * (center1[1] - center2[1]) + (center1[2] - center2[2]) * (center1[2] - center2[2]));
+	std::cout << "distance of the two tissues is :" << distance << std::endl;
+
+	// we use original tumor radius which should be modified if the radius of the spheroids changed
+	double tumor_radius1 =
+		parameters.doubles("first_tumor_radius"); // 250.0;
+	double tumor_radius2 =
+		parameters.doubles("second_tumor_radius"); // 250.0;
+
+	std::vector<double> R1, R2;
+	double R1max, R2max;
+	R1max = 0;
+	R2max = 0;
+	for (int i = 0; i < (*all_cells).size(); i++)
+	{
+		Cell *pCell = (*all_cells)[i];
+		std::cout << "type:" << pCell->type << std::endl;
+
+		if (pCell->type == 0)
+		{
+			double tmpr=sqrt((pCell->position[0]-center1[0])*(pCell->position[0]-center1[0])
+			+pCell->position[1]-center1[1])*(pCell->position[1]-center1[1])
+			+pCell->position[2]-center1[2])*(pCell->position[2]-center1[2]));
+			R1.push_back(tmpr);
+			if (tmpr > R1max)
+				R1max = tmpr;
+		}
+		else if (pCell->type == 1)
+		{
+		double tmpr=sqrt((pCell->position[0]-center2[0])*(pCell->position[0]-center2[0])
+			+pCell->position[1]-center2[1])*(pCell->position[1]-center2[1])
+			+pCell->position[2]-center2[2])*(pCell->position[2]-center2[2]));
+		R2.push_back(tmpr);
+		if (tmpr > R2max)
+			R2max = tmpr;
+		}
+	}
+tumor_radius1=R1max;
+tumor_radius2=R2max;
+
+cout<<"LUO: radius 1:"<<tumor_radius1<<std::endl;
+cout<<"LUO: radius 2:"<<tumor_radius2<<std::endl;
+
+	double dx = 0.5 * (distance - tumor_radius1 - tumor_radius2);
+	for (int i = 0; i < (*all_cells).size(); i++)
+	{
+		Cell *pCell = (*all_cells)[i];
+		if (pCell->type == 0)
+		{
+			double newx = pCell->position[0] + dx;
+			pCell->assign_position(newx, pCell->position[1], pCell->position[2]);
+		}
+		else if (pCell->type == 1)
+		{
+			double newx = pCell->position[0] - dx;
+			pCell->assign_position(newx, pCell->position[1], pCell->position[2]);
+		}
+	}
+
 	return;
 }

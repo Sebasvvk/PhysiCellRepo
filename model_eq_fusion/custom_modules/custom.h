@@ -92,4 +92,6 @@ void contact_function( Cell* pMe, Phenotype& phenoMe , Cell* pOther, Phenotype& 
 
 std::vector<std::vector<double>> create_cell_sphere_positions(double cell_radius, double sphere_radius);
 
+void move_tissues();
+
 
